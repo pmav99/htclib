@@ -52,11 +52,15 @@ class HTCondorJob(BaseModel):
     input_files: Optional[str]
 
     @validator("path")
-    def _expand_path(cls, path: pathlib.Path) -> pathlib.Path:
+    def _expand_path(  # pylint: disable=no-self-use,no-self-argument
+        cls, path: pathlib.Path  # noqa
+    ) -> pathlib.Path:
         return path.expanduser().resolve()
 
     @validator("log_prefix", always=True)
-    def _set_default_log_prefix(cls, log_prefix: Optional[pathlib.Path], values: Dict[str, Any]) -> pathlib.Path:
+    def _set_default_log_prefix(  # pylint: disable=no-self-use,no-self-argument
+        cls, log_prefix: Optional[pathlib.Path], values: Dict[str, Any]  # noqa
+    ) -> pathlib.Path:
         # If `log_prefix` is omitted, we  set its value to `HTCondorJob.path`
         if log_prefix is None:
             log_prefix = values["path"].parent / values["path"].stem
@@ -72,7 +76,9 @@ def save_job(job: HTCondorJob) -> None:
     job.path.write_text(str(job))
 
 
-def submit_job(job: HTCondorJob) -> subprocess.CompletedProcess:
+def submit_job(
+    job: HTCondorJob,
+) -> subprocess.CompletedProcess:  # type: ignore  # pylint: disable=unsubscriptable-object
     """ Submit the job description to the HTCondor scheduler """
     cmd = f"sudo -u {job.proc_user} condor_submit {job.path.as_posix()}"
     proc = subprocess.run(shlex.split(cmd), check=True, capture_output=True, text=True)

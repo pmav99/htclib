@@ -1,12 +1,15 @@
 import pathlib
-import typing
+
+from typing import Any
+from typing import Dict
 
 import pytest
 
 import htclib
 
-DEFAULT_ARGUMENTS = dict(
-    path="/tmp/htclib.job",
+# DEFAULT_ARGUMENTS: Mapping[str, Union[str, pathlib.Path, bool]] = dict(
+DEFAULT_ARGUMENTS: Dict[str, Any] = dict(
+    path=pathlib.Path("/tmp/htclib.job"),
     docker_image="htclib:latest",
     executable="/usr/bin/cat",
     arguments="/etc/fstab",
@@ -15,7 +18,7 @@ DEFAULT_ARGUMENTS = dict(
 
 
 @pytest.fixture
-def tmp_job(tmp_path) -> htclib.HTCondorJob:
+def tmp_job(tmp_path: pathlib.Path) -> htclib.HTCondorJob:
     data = DEFAULT_ARGUMENTS.copy()
     data["path"] = tmp_path / "htclib.job"
     job = htclib.HTCondorJob(**data)
@@ -29,7 +32,7 @@ def tmp_job(tmp_path) -> htclib.HTCondorJob:
         pytest.param(pathlib.Path("/tmp/foo"), id="path without suffix"),
     ],
 )
-def test_log_prefix_dynamic_default(path) -> None:
+def test_log_prefix_dynamic_default(path: pathlib.Path) -> None:
     """ Check that the log_prefix is set dynamically when it is omitted """
     data = DEFAULT_ARGUMENTS.copy()
     data["path"] = path
@@ -45,14 +48,14 @@ def test_log_prefix_explicit_value() -> None:
     assert job.log_prefix == data["log_prefix"]
 
 
-def test_str_representation(tmp_job) -> None:
+def test_str_representation(tmp_job: htclib.HTCondorJob) -> None:
     str_job = str(tmp_job)
     assert str_job.startswith("universe")
     assert str_job.endswith("queue 1")
     assert len(str_job.splitlines()) > 10
 
 
-def test_save_job(tmp_job):
+def test_save_job(tmp_job: htclib.HTCondorJob) -> None:
     # check that the job description file gets created
     assert not tmp_job.path.exists()
     htclib.save_job(tmp_job)
