@@ -5,7 +5,7 @@ description = ""
 authors = ["Panos Mavrogiorgos <pmav99@gmail.com>"]
 
 [tool.poetry.dependencies]
-python = "^3.9"
+python = "^3.7"
 pydantic = "^1.7.3"
 Jinja2 = "^2.11.3"
 
