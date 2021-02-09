@@ -26,7 +26,7 @@ error                   = {{ log_prefix }}.$(ClusterId).err
 {% endif -%}
 log                     = {{ log_prefix }}.$(ClusterId).log
 request_memory          = {{ memory }}
-{% if transfer_files -%}
+{% if input_files -%}
 transfer_input_files    = {{ input_files }}
 {% endif -%}
 should_transfer_files   = YES
