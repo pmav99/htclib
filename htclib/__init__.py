@@ -31,7 +31,7 @@ transfer_input_files    = {{ input_files }}
 {% endif -%}
 should_transfer_files   = YES
 when_to_transfer_output = ON_EXIT
-queue 1
+queue {{ queue }}
 """.strip()
 )
 
@@ -50,6 +50,7 @@ class HTCondorJob(BaseModel):
     log_prefix: Optional[pathlib.Path] = None
     memory: str = "2G"
     input_files: Optional[str]
+    queue: str = "1"
 
     @validator("path")
     def _expand_path(  # pylint: disable=no-self-use,no-self-argument
