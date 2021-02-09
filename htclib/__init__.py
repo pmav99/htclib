@@ -19,12 +19,12 @@ docker_image            = {{ docker_image }}
 executable              = {{ executable }}
 arguments               = {{ arguments }}
 {% if stdout -%}
-output                  = {{ log_prefix }}.$(ClusterId).out
+output                  = {{ log_prefix }}.$(ClusterId).$(Process).out
 {% endif -%}
 {% if stderr -%}
-error                   = {{ log_prefix }}.$(ClusterId).err
+error                   = {{ log_prefix }}.$(ClusterId).$(Process).err
 {% endif -%}
-log                     = {{ log_prefix }}.$(ClusterId).log
+log                     = {{ log_prefix }}.$(ClusterId).$(Process).log
 request_memory          = {{ memory }}
 {% if input_files -%}
 transfer_input_files    = {{ input_files }}
